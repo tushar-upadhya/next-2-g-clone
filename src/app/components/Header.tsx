@@ -9,15 +9,20 @@ const Header: React.FC = () => {
   return (
     <div className="flex justify-end pr-4 pt-3 space-x-4 items-center">
       <p className="hover:underline text-sm">Gmail</p>
+
       <p className="hover:underline text-sm">Images</p>
+
       <TbGridDots className="text-4xl hover:bg-gray-200 p-2 rounded-full" />
-      <Image
-        src={ImageUrl}
-        alt="profileImage"
-        width={30}
-        height={30}
-        className="rounded-full object-cover"
-      />
+
+      <a href="https://tusharupadhyay.vercel.app/">
+        <Image
+          src={ImageUrl}
+          alt="profileImage"
+          width={30}
+          height={30}
+          className="rounded-full object-cover"
+        />
+      </a>
     </div>
   );
 };
