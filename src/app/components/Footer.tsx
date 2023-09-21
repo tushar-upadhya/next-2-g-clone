@@ -18,8 +18,9 @@ const Footer: React.FC = () => {
 
         <ul className="flex ml-auto [&>*]:ml-6 text-sm text-slate-600">
           <a
-            href="https://github.com/tushar-upadhya"
+            href="https://github.com/tushar-upadhya/next-2-g-clone"
             className="hover:text-cyan-950 font-semibold"
+            target="_blank"
           >
             <li>Github</li>
           </a>
@@ -27,6 +28,7 @@ const Footer: React.FC = () => {
           <a
             href="https://www.linkedin.com/in/tushar-upadhyay-54029b135/"
             className="hover:text-cyan-950 font-semibold"
+            target="_blank"
           >
             <li>Linkedin</li>
           </a>

@@ -14,7 +14,7 @@ const Header: React.FC = () => {
 
       <TbGridDots className="text-4xl hover:bg-gray-200 p-2 rounded-full" />
 
-      <a href="https://tusharupadhyay.vercel.app/">
+      <a href="https://tusharupadhyay.vercel.app/" target="_blank">
         <Image
           src={ImageUrl}
           alt="profileImage"
