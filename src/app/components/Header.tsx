@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { TbGridDots } from "react-icons/tb";
 
@@ -8,11 +9,23 @@ const Header: React.FC = () => {
 
   return (
     <div className="flex justify-end pr-4 pt-3 space-x-4 items-center">
-      <p className="hover:underline text-sm">Gmail</p>
+      <Link
+        href="https://mail.google.com"
+        target="_blank"
+        className="hover:underline text-sm cursor-pointer"
+      >
+        Gmail
+      </Link>
 
-      <p className="hover:underline text-sm">Images</p>
+      <Link
+        target="_blank"
+        href="https://image.google.com"
+        className="hover:underline text-sm cursor-pointer"
+      >
+        Images
+      </Link>
 
-      <TbGridDots className="text-4xl hover:bg-gray-200 p-2 rounded-full" />
+      <TbGridDots className="text-4xl cursor-pointer hover:bg-gray-200 p-2 rounded-full" />
 
       <a href="https://tusharupadhyay.vercel.app/" target="_blank">
         <Image
