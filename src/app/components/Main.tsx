@@ -1,18 +1,30 @@
 "use client";
 
-import Image from "next/image";
-
-import { AiOutlineSearch } from "react-icons/ai";
-import { BsFillMicFill } from "react-icons/bs";
-import { AiFillCamera } from "react-icons/ai";
-import { BiMicrophone } from "react-icons/bi";
+import "regenerator-runtime";
 
 import { useState } from "react";
 
+import Image from "next/image";
+
+import { AiOutlineSearch } from "react-icons/ai";
+import { BiMicrophone } from "react-icons/bi";
+import { BsFillMicFill } from "react-icons/bs";
+import { AiFillCamera } from "react-icons/ai";
+
 import { useRouter } from "next/navigation";
 
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
+
 const Main: React.FC = () => {
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<any>("");
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
 
   const router = useRouter();
 
@@ -29,49 +41,99 @@ const Main: React.FC = () => {
     router.push(`https://google.com/search?q=${search}`);
   };
 
+  const handleStartListening = () => {
+    SpeechRecognition.startListening({ continuous: true, language: "en-IN" });
+  };
+
+  const handleStopListening = () => {
+    SpeechRecognition.stopListening();
+    setSearch(transcript);
+  };
+
+  const handleSelectImage = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const response = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        if (!event.target) return;
+        resolve(event.target.result);
+      };
+
+      reader.onerror = (err) => {
+        reject(err);
+      };
+
+      reader.readAsDataURL(file);
+    });
+    console.log(response);
+    document.location.assign(
+      `https://www.google.com/searchbyimage?&image_url=${response}`
+    );
+  };
+
+  if (!browserSupportsSpeechRecognition) {
+    return null;
+  }
   return (
-    <div className="items-center flex flex-col mt-28">
-      <div>
-        <Image
-          src={googleLogoImage}
-          alt="google_logo"
-          height={270}
-          width={270}
-        />
-      </div>
+    <div className="flex flex-col items-center mt-28">
+      <Image
+        src={googleLogoImage}
+        alt="googleLogoImage"
+        width={270}
+        height={100}
+      />
 
       <form
         onSubmit={(e) => handleSubmit(e)}
-        className="flex border mt-7 px-5 rounded-full w-2/5 items-center"
+        className="flex border mt-7 px-5 py-2 rounded-full w-2/5 items-center cursor-pointer"
       >
-        <AiOutlineSearch className="text-xl cursor-pointer text-slate-400" />
+        <AiOutlineSearch className="text-xl text-slate-400" />
 
         <input
           type="text"
-          placeholder="searching"
           className="w-full focus:outline-none ml-4"
+          value={search || transcript}
           onChange={(e) => setSearch(e.target.value)}
-          value={search}
         />
 
-        {/* <BsFillMicFill className="text-3xl cursor-pointer text-slate-400 mr-5" /> */}
+        {listening ? (
+          <BsFillMicFill
+            onClick={handleStopListening}
+            className="text-3xl text-slate-400 mr-5"
+          />
+        ) : (
+          <BiMicrophone
+            onClick={handleStartListening}
+            className="text-3xl text-slate-400 mr-5 cursor-pointer"
+          />
+        )}
 
-        <BiMicrophone className="text-3xl cursor-pointer text-slate-400 mr-5" />
+        <label htmlFor="imageInput">
+          <AiFillCamera className="text-3xl text-slate-400 cursor-pointer" />
+        </label>
 
-        <AiFillCamera className="text-3xl cursor-pointer text-slate-400" />
+        <input
+          type="file"
+          id="imageInput"
+          style={{ display: "none" }}
+          onChange={(e) => handleSelectImage(e)}
+        />
       </form>
 
-      <div className="mt-7">
+      <div className="flex mt-7">
         <button
-          onClick={(e) => handleSubmit(e)}
           className="bg-slate-100 mr-3 py-2 px-4 text-sm rounded hover:border"
+          onClick={(e) => handleSubmit(e)}
         >
           Google Search
         </button>
 
         <button
-          onClick={() => router.push("https://www.google.com/doodles")}
           className="bg-slate-100 py-2 px-4 text-sm  rounded hover:border"
+          onClick={() => router.push("https://www.google.com/doodles")}
         >
           I'm Feeling Lucky
         </button>
